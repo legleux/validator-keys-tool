@@ -32,12 +32,17 @@ target_compile_options (keys_opts
     $<$<AND:$<BOOL:${is_gcc}>,$<BOOL:${profile}>>:-p>)
 
 target_link_libraries (keys_opts
-  INTERFACE
+    INTERFACE
+    -rdynamic
+    $<$<BOOL:${is_linux}>:-Wl,-z,relro,-z,now>
+    $<$<AND:$<BOOL:${static}>,$<NOT:$<BOOL:${APPLE}>>>:
+      -static-libstdc++
+      -static-libgcc
+    >
     $<$<AND:$<BOOL:${is_gcc}>,$<BOOL:${coverage}>>:-fprofile-arcs -ftest-coverage>
     $<$<AND:$<BOOL:${is_clang}>,$<BOOL:${coverage}>>:-fprofile-instr-generate -fcoverage-mapping>
     $<$<BOOL:${profile}>:-pg>
     $<$<AND:$<BOOL:${is_gcc}>,$<BOOL:${profile}>>:-p>)
-
 if (jemalloc)
   if (static)
     set(JEMALLOC_USE_STATIC ON CACHE BOOL "" FORCE)
@@ -66,4 +71,3 @@ if (san)
       $<$<STREQUAL:${san},undefined>:SANITIZER=UBSAN>)
   target_link_libraries (keys_opts INTERFACE ${SAN_FLAG} ${SAN_LIB})
 endif ()
-
