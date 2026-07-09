@@ -85,7 +85,7 @@ Sample output:
 ```
   WARNING: This will revoke your validator keys!
 
-  Update xrpld.cfg file with these values and restart rippled:
+  Update xrpld.cfg file with these values and restart xrpld:
 
   # validator public key: nHUtNnLVx7odrz5dnfb2xpIgbEeJPbzJWfdicSkGyVw1eE5GpjQr
 
